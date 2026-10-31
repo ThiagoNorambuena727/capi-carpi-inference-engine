@@ -1,0 +1,60 @@
+﻿name: C++17 AVX2 Build & Math Verification
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Compile and Run Mathematical Correctness Suite (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        mkdir -p build
+        g++ -O3 -std=c++17 -mavx2 -mfma -fopenmp \
+          test_correctness.cpp \
+          src/utils/transpose.cpp \
+          src/avx/avx_ops.cpp \
+          src/avx/ternary_ops.cpp \
+          src/attention/softmax.cpp \
+          -o build/test_correctness
+        ./build/test_correctness
+
+    - name: Compile and Run Benchmark Smoke Test (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        g++ -O3 -std=c++17 src/tools/model_builder.cpp -o build/model_builder
+        ./build/model_builder --d-model 128 --vocab 2048 --experts 4 --top-k 2 --out test.bin --yes
+        g++ -O3 -std=c++17 -mavx2 -mfma -fopenmp \
+          benchmark_capi.cpp \
+          src/tensor/mmap_loader.cpp src/utils/transpose.cpp \
+          src/avx/avx_ops.cpp src/avx/ternary_ops.cpp \
+          src/attention/softmax.cpp src/attention/moe_router.cpp \
+          src/attention/ssm_memory.cpp src/attention/ssm_forward.cpp \
+          src/model/capi_model.cpp \
+          -o build/benchmark_capi
+        ./build/benchmark_capi test.bin 50
+
+    - name: Compile and Run Suite (Windows MinGW)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        New-Item -ItemType Directory -Force -Path build | Out-Null
+        g++ -O3 -std=c++17 -mavx2 -mfma -fopenmp `
+          test_correctness.cpp `
+          src/utils/transpose.cpp `
+          src/avx/avx_ops.cpp `
+          src/avx/ternary_ops.cpp `
+          src/attention/softmax.cpp `
+          -o build/test_correctness.exe
+        ./build/test_correctness.exe

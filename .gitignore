@@ -1,0 +1,18 @@
+﻿# Archivos binarios y modelos generados localmente
+*.bin
+*.idx
+*.exe
+*.dll
+*.so
+*.o
+build/
+
+# Entornos y caché de Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Archivos de R
+.Rhistory
+.RData
