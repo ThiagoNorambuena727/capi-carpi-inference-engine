@@ -1,4 +1,4 @@
-﻿name: C++17 AVX2 Build & Math Verification
+name: C++17 AVX2 Build & Math Verification
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
 jobs:
   build-and-test:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
