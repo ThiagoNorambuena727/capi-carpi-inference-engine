@@ -1,31 +1,4 @@
-// Archivo: src/model/model_header.h
-#pragma once
-
-#include <cstdint>
-
-namespace gcapi_carpi {
-
-#pragma pack(push, 1) // Asegura que C++ no agregue bytes de relleno (padding)
-
-/**
- * @brief Estructura de la cabecera del archivo model.bin
- * ALINEACIÓN ESTRICTA: Debe coincidir exactamente con el struct.pack("<4i 5Q") de Python
- */
-struct ModelHeader {
-    int32_t d_model;                    // 4 bytes
-    int32_t num_experts;                // 4 bytes
-    int32_t top_k;                      // 4 bytes
-    int32_t vocab_size;                 // 4 bytes
-    uint64_t embedding_offset;          // 8 bytes
-    uint64_t router_weights_offset;     // 8 bytes
-    uint64_t lm_head_offset;            // 8 bytes
-    uint64_t expert_weights_base_offset;// 8 bytes
-    uint64_t expert_weight_block_size_bytes; // 8 bytes
-};
-
-#pragma pack(pop)
-
-// Archivo: src/model/model_header.h
+﻿// Archivo: src/model/model_header.h
 #pragma once
 
 #include <cstdint>
