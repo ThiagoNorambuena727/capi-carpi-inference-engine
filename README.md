@@ -1,3 +1,4 @@
+[![build & math verification](https://github.com/ThiagoNorambuena727/capi-carpi-inference-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/ThiagoNorambuena727/capi-carpi-inference-engine/actions)
 # ⚡ Capi-Carpi: motor de inferencia SSM + MoE ternario en C++17 puro
 
 **🇪🇸 Español** · [🇬🇧 English](README-English.md)
